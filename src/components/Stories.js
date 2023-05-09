@@ -12,7 +12,12 @@ const items = [
   { username: "sekula", img: "https://i.pravatar.cc/150?img=5", id: 5 },
   { username: "micko", img: "https://i.pravatar.cc/150?img=6", id: 6 },
   { username: "laza", img: "https://i.pravatar.cc/150?img=7", id: 7 },
-  { username: "natasa", img: "https://i.pravatar.cc/150?img=8", id: 8 },
+  {
+    username: "petar.petrovic.njegos",
+    img: "https://i.pravatar.cc/150?img=8",
+    id: 8,
+  },
+  { username: "natasa", img: "https://i.pravatar.cc/150?img=9", id: 9 },
 ];
 function Stories() {
   const [storyUsers, setStoryUsers] = useState([]);
@@ -28,7 +33,11 @@ function Stories() {
     setStoryUsers(items);
   }, []);
   return (
-    <div>
+    <div
+      className={
+        "flex space-x-2 p-6 bg-white mt-8 border-gray-200 border overflow-x-scroll rounded-sm scrollbar-track-blue-300"
+      }
+    >
       {storyUsers.map((user) => (
         <Story key={user.id} username={user.username} img={user.img} />
       ))}
