@@ -1,12 +1,13 @@
 import React from "react";
 import Stories from "@/components/Stories";
+import Posts from "@/components/Posts";
 
 function Feed() {
   return (
     <main>
       <section className={""}>
         <Stories />
-        {/*posts*/}
+        <Posts />
       </section>
       <section>
         {/*mini profile */}
