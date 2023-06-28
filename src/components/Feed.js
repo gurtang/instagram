@@ -2,6 +2,7 @@ import React from "react";
 import Stories from "@/components/Stories";
 import Posts from "@/components/Posts";
 import MiniProfile from "@/components/MiniProfile";
+import Suggestions from "@/components/Suggestions";
 
 function Feed() {
   return (
@@ -12,11 +13,10 @@ function Feed() {
       </section>
       <section className={"hidden md:inline-grid md:col-span-1"}>
         <div className={""}>
-          {/*mini profile */}
           <div className={"fixed w-[380px]"}>
             <MiniProfile />
+            <Suggestions />
           </div>
-          {/*suggestisons*/}
         </div>
       </section>
     </main>
