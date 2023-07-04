@@ -13,6 +13,17 @@ export const authOptions = {
   pages: {
     signIn: "/signin",
   },
+
+  callbacks: {
+    async session({ session, token, user }) {
+      session.user.username = session.user.name
+        .split(" ")
+        .join("")
+        .toLocaleLowerCase();
+      session.user.uid = token.sub;
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);

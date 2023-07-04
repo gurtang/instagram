@@ -1,12 +1,20 @@
-import React from "react";
+"use client";
 import Stories from "@/components/Stories";
 import Posts from "@/components/Posts";
 import MiniProfile from "@/components/MiniProfile";
 import Suggestions from "@/components/Suggestions";
+import { useSession } from "next-auth/react";
 
 function Feed() {
+  const { data: session } = useSession();
   return (
-    <main className={"grid grid-col-1 md:grid-cols-3 md:max-w-6xl mx-auto"}>
+    <main
+      className={`grid ${
+        session
+          ? "grid-col-1 md:grid-cols-3 md:max-w-6xl mx-auto"
+          : "grid-col-1 md:grid-cols-2 md:max-w-3xl mx-auto"
+      } `}
+    >
       <section className={"md:col-span-2"}>
         <Stories />
         <Posts />
