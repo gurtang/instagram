@@ -1,10 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import {
-  MagnifyingGlassIcon,
-  PlusCircleIcon,
-} from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { HomeIcon } from "@heroicons/react/24/solid";
+import SignInButton from "@/components/SignInButton";
 
 function Header() {
   return (
@@ -59,18 +57,7 @@ function Header() {
               "hidden md:inline-flex h-6 cursor-pointer hover:scale-125 transition-transform duration-200 ease-out"
             }
           />
-          <PlusCircleIcon
-            className={
-              "h-6 cursor-pointer hover:scale-125 transition-transform duration-200 ease-out"
-            }
-          />
-          <img
-            className={"h-10 rounded-full cursor-pointer"}
-            src={
-              "https://png.pngtree.com/png-vector/20220709/ourmid/pngtree-businessman-user-avatar-wearing-suit-with-red-tie-png-image_5809521.png"
-            }
-            alt={"user-image"}
-          />
+          <SignInButton />
         </div>
       </div>
     </div>
