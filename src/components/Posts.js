@@ -32,7 +32,6 @@ function Posts() {
           caption={post.caption}
         />
       ))}
-      )
     </div>
   );
 }
