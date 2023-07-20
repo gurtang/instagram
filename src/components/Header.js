@@ -1,10 +1,13 @@
+"use client";
 import React from "react";
 import Image from "next/image";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { HomeIcon } from "@heroicons/react/24/solid";
 import SignInButton from "@/components/SignInButton";
+import { useRouter } from "next/navigation";
 
 function Header() {
+  const router = useRouter();
   return (
     <div className={"shadow-sm border-b sticky top-0 bg-white z-30"}>
       <div
@@ -25,6 +28,7 @@ function Header() {
               }
               layout={"fill"}
               className={"object-contain"}
+              onClick={() => router.push("/")}
             />
           </div>
           <div className={"cursor-pointer h-24 w-10 relative  lg:hidden"}>
@@ -35,6 +39,7 @@ function Header() {
               }
               layout={"fill"}
               className={"object-contain"}
+              onClick={() => router.push("/")}
             />
           </div>
         </div>
@@ -56,6 +61,7 @@ function Header() {
             className={
               "hidden md:inline-flex h-6 cursor-pointer hover:scale-125 transition-transform duration-200 ease-out"
             }
+            onClick={() => router.push("/")}
           />
           <SignInButton />
         </div>
