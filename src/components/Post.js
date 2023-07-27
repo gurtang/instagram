@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
   EllipsisHorizontalIcon,
-  HeartIcon,
   BookmarkIcon,
   ChatBubbleOvalLeftEllipsisIcon,
   FaceSmileIcon,
+  HeartIcon,
 } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { useSession } from "next-auth/react";
 import {
   addDoc,
@@ -14,14 +15,20 @@ import {
   query,
   serverTimestamp,
   orderBy,
+  doc,
+  setDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import Moment from "react-moment";
+// import { session } from "next-auth/core/routes";
 
 function Post({ img, userImg, caption, id, key, username }) {
   const { data: session } = useSession();
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState([]);
+  const [hasLiked, setHasLiked] = useState(false);
 
   useEffect(() => {
     const unsubsribe = onSnapshot(
@@ -34,6 +41,28 @@ function Post({ img, userImg, caption, id, key, username }) {
       }
     );
   }, [db, id]);
+
+  useEffect(() => {
+    const unsubsribe = onSnapshot(
+      collection(db, "posts", id, "likes"),
+      (snapshot) => setLikes(snapshot.docs)
+    );
+  }, [db]);
+  useEffect(() => {
+    setHasLiked(
+      likes.findIndex((like) => like.id === session?.user.uid) !== -1
+    );
+  }, [likes]);
+
+  async function likePost() {
+    if (hasLiked) {
+      await deleteDoc(doc(db, "posts", id, "likes", session.user.uid));
+    } else {
+      await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
+        username: session.user.username,
+      });
+    }
+  }
 
   async function sendComment(event) {
     event.preventDefault();
@@ -64,7 +93,14 @@ function Post({ img, userImg, caption, id, key, username }) {
       {session && (
         <div className={"flex  justify-between px-4 pt-4"}>
           <div className={"flex space-x-4"}>
-            <HeartIcon className={"btn"} />
+            {hasLiked ? (
+              <HeartIconSolid
+                onClick={likePost}
+                className={"btn text-red-400"}
+              />
+            ) : (
+              <HeartIcon onClick={likePost} className={"btn"} />
+            )}
             <ChatBubbleOvalLeftEllipsisIcon className={"btn"} />
           </div>
           <BookmarkIcon className={"btn"} />
