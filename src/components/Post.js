@@ -7,7 +7,6 @@ import {
   HeartIcon,
 } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
-import { useSession } from "next-auth/react";
 import {
   addDoc,
   collection,
@@ -21,14 +20,15 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebase";
 import Moment from "react-moment";
-// import { session } from "next-auth/core/routes";
+import { useRecoilState } from "recoil";
+import { userState } from "../../atom/userAtom";
 
 function Post({ img, userImg, caption, id, key, username }) {
-  const { data: session } = useSession();
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [likes, setLikes] = useState([]);
   const [hasLiked, setHasLiked] = useState(false);
+  const [currentUser] = useRecoilState(userState);
 
   useEffect(() => {
     const unsubsribe = onSnapshot(
@@ -49,17 +49,15 @@ function Post({ img, userImg, caption, id, key, username }) {
     );
   }, [db]);
   useEffect(() => {
-    setHasLiked(
-      likes.findIndex((like) => like.id === session?.user.uid) !== -1
-    );
+    setHasLiked(likes.findIndex((like) => like.id === currentUser?.uid) !== -1);
   }, [likes]);
 
   async function likePost() {
     if (hasLiked) {
-      await deleteDoc(doc(db, "posts", id, "likes", session.user.uid));
+      await deleteDoc(doc(db, "posts", id, "likes", currentUser?.uid));
     } else {
-      await setDoc(doc(db, "posts", id, "likes", session.user.uid), {
-        username: session.user.username,
+      await setDoc(doc(db, "posts", id, "likes", currentUser?.uid), {
+        username: currentUser?.username,
       });
     }
   }
@@ -70,8 +68,8 @@ function Post({ img, userImg, caption, id, key, username }) {
     setComment("");
     await addDoc(collection(db, "posts", id, "comments"), {
       comment: commentToSend,
-      username: session.user.username,
-      userImage: session.user.image,
+      username: currentUser?.username,
+      userImage: currentUser?.userImg,
       timestamp: serverTimestamp(),
     });
   }
@@ -90,7 +88,7 @@ function Post({ img, userImg, caption, id, key, username }) {
 
       <img className={"object-cover w-full"} src={img} alt={""} />
       {/*Post Buttons*/}
-      {session && (
+      {currentUser && (
         <div className={"flex  justify-between px-4 pt-4"}>
           <div className={"flex space-x-4"}>
             {hasLiked ? (
@@ -136,7 +134,7 @@ function Post({ img, userImg, caption, id, key, username }) {
         </div>
       )}
       {/*input box*/}
-      {session && (
+      {currentUser && (
         <form className={"flex items-center p-4"}>
           <FaceSmileIcon className={"h-7"} />
           <input

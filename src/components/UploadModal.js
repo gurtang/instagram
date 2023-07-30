@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { db, storage } from "../../firebase";
-import { useSession } from "next-auth/react";
+import { userState } from "../../atom/userAtom";
 
 function UploadModal() {
   const [open, setOpen] = useRecoilState(modalState);
@@ -21,7 +21,7 @@ function UploadModal() {
   const captionRef = useRef(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { data: session } = useSession();
+  const [currentUser] = useRecoilState(userState);
 
   async function uploadPost() {
     if (loading) return;
@@ -29,8 +29,8 @@ function UploadModal() {
 
     const docRef = await addDoc(collection(db, "posts"), {
       caption: captionRef.current.value,
-      username: session.user.username,
-      profileImg: session.user.image,
+      username: currentUser?.username,
+      profileImg: currentUser?.userImg,
       timestamp: serverTimestamp(),
     });
 

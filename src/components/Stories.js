@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 // import minifaker from "minifaker";
 // import "minifaker/locales/en";
 import Story from "@/components/Story";
-import { useSession } from "next-auth/react";
+import { useRecoilState } from "recoil";
+import { userState } from "../../atom/userAtom";
 
 const items = [
   { username: "pera", img: "https://i.pravatar.cc/150?img=1", id: 1 },
@@ -21,7 +22,7 @@ const items = [
   { username: "natasa", img: "https://i.pravatar.cc/150?img=9", id: 9 },
 ];
 function Stories() {
-  const { data: session } = useSession();
+  const [currentUser] = useRecoilState(userState);
   const [storyUsers, setStoryUsers] = useState([]);
   useEffect(() => {
     // const storyUsers = minifaker.array(20, (i) => [
@@ -40,10 +41,10 @@ function Stories() {
         "flex space-x-2 p-6 bg-white mt-8 border-gray-200 border overflow-x-scroll rounded-sm scrollbar-track-blue-300"
       }
     >
-      {session && (
+      {currentUser && (
         <Story
-          img={session.user.image}
-          username={session.user.username}
+          img={currentUser?.userImg}
+          username={currentUser?.username}
           isUser={"true"}
         />
       )}
